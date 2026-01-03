@@ -38,24 +38,22 @@ class MovieListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Movie
-        fields = ("id", "title", "description", "duration", "genres", "actors",)
+        fields = ("id", "title", "description", "duration", "genres", "actors")
 
-    def get_queryset(self):
-        queryset = Movie.objects.all()
+    def get_queryset(self) -> None:
+        queryset = Movie.objects
         if self.action == "list":
             queryset = queryset.prefetch_related("genres", "actors")
 
         elif self.action == "retrieve":
             queryset = queryset.prefetch_related("genres", "actors")
 
-    def get_actors(self, obj):
-        return [f"{actor.first_name} {actor.last_name}" for actor in obj.actors.all()]
-
-    def to_representation(self, instance):
+    def to_representation(self, instance) -> dict:
         """Customize output: display names for list view"""
         rep = super().to_representation(instance)
         rep["genres"] = [genre.name for genre in instance.genres.all()]
-        rep["actors"] = [f"{a.first_name} {a.last_name}" for a in instance.actors.all()]
+        rep["actors"] = [f"{a.first_name} {a.last_name}"
+                         for a in instance.actors.all()]
         return rep
 
 
@@ -106,7 +104,7 @@ class MovieSessionDetailSerializer(serializers.ModelSerializer):
         model = MovieSession
         fields = ("id", "show_time", "movie", "cinema_hall")
 
-    def to_representation(self, instance):
+    def to_representation(self, instance) -> dict:
         # Start with the default representation
         rep = super().to_representation(instance)
 
