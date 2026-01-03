@@ -1,5 +1,3 @@
-from queue import Queue
-
 from django.db.models import QuerySet
 from rest_framework import viewsets
 

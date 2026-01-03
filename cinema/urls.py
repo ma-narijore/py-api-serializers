@@ -13,5 +13,5 @@ router.register(r"movie_sessions",
                 views.MovieSessionViewSet, basename="movie_session")
 
 urlpatterns = [
-    path("/api/cinema/", include(router.urls)),
+    path("api/cinema/", include(router.urls)),
 ]

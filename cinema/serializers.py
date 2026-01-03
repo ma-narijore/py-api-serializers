@@ -40,14 +40,6 @@ class MovieListSerializer(serializers.ModelSerializer):
         model = Movie
         fields = ("id", "title", "description", "duration", "genres", "actors")
 
-    def get_queryset(self) -> None:
-        queryset = Movie.objects
-        if self.action == "list":
-            queryset = queryset.prefetch_related("genres", "actors")
-
-        elif self.action == "retrieve":
-            queryset = queryset.prefetch_related("genres", "actors")
-
     def to_representation(self, instance) -> dict:
         """Customize output: display names for list view"""
         rep = super().to_representation(instance)
@@ -81,13 +73,13 @@ class MovieSessionSerializer(serializers.ModelSerializer):
             "cinema_hall_capacity",
         )
 
-    def get_movie_title(self, obj):
+    def get_movie_title(self, obj) -> int:
         return obj.movie.title if obj.movie else None
 
-    def get_cinema_hall_name(self, obj):
+    def get_cinema_hall_name(self, obj) -> int:
         return obj.cinema_hall.name if obj.cinema_hall else None
 
-    def get_cinema_hall_capacity(self, obj):
+    def get_cinema_hall_capacity(self, obj) -> int | None:
         if obj.cinema_hall:
             seats_in_row = obj.cinema_hall.seats_in_row
             rows = obj.cinema_hall.rows
